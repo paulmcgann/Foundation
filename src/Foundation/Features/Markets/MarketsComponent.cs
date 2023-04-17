@@ -1,5 +1,6 @@
 ﻿using Foundation.Infrastructure.Commerce;
 using Mediachase.Commerce.Markets;
+using System.Globalization;
 
 namespace Foundation.Features.Markets
 {
@@ -36,11 +37,13 @@ namespace Foundation.Features.Markets
             }
             else
             {
+                var temp = _marketService.GetAllMarkets();
+
                 var markets = _marketService.GetAllMarkets().Where(x => x.IsEnabled).OrderBy(x => x.MarketName)
                     .Select(x => new MarketItem
                     {
                         DisplayName = x.MarketName,
-                        Value = x.MarketId.Value,
+                        Value = x.MarketId.Value.ConvertThreeLetterNameToTwoLetterName(),
                         FlagUrl = GetFlagUrl(x.MarketId.Value)
                     });
                 var languages = _languageService.GetAvailableLanguages()

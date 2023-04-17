@@ -6,6 +6,7 @@ using EPiServer.ContentApi.Cms;
 using EPiServer.ContentApi.Cms.Internal;
 using EPiServer.ContentDefinitionsApi;
 using EPiServer.ContentManagementApi;
+using EPiServer.Core.Routing.Pipeline.Internal;
 using EPiServer.Data;
 using EPiServer.Labs.BlockEnhancements;
 using EPiServer.Labs.ContentManager;
@@ -17,6 +18,7 @@ using Foundation.Features.Checkout.Payments;
 using Foundation.Infrastructure.Cms.ModelBinders;
 using Foundation.Infrastructure.Cms.Users;
 using Foundation.Infrastructure.Display;
+using Foundation.Infrastructure.Routing;
 using Geta.NotFoundHandler.Infrastructure.Configuration;
 using Geta.NotFoundHandler.Infrastructure.Initialization;
 using Geta.NotFoundHandler.Optimizely.Infrastructure.Configuration;
@@ -234,6 +236,10 @@ namespace Foundation
             // Add GroupingHeader
             // https://github.com/advanced-cms/grouping-header/
             services.AddGroupingHeader();
+
+            services.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Transient(typeof(IUrlGeneratorPipelineStep), typeof(MarketGeneratorStep)));
+            services.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Transient(typeof(IUrlResolverPipelineStep), typeof(MarketResolverStep)));
+            services.AddStartupFilter<RegisterRoutingPipelineSteps>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

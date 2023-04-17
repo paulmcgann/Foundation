@@ -1,4 +1,6 @@
-﻿namespace Foundation.Infrastructure.Commerce.Extensions
+﻿using System.Globalization;
+
+namespace Foundation.Infrastructure.Commerce.Extensions
 {
     public static class MarketExtensions
     {
@@ -39,6 +41,56 @@
                 default:
                     return "US";
             }
+        }
+
+        public static string ConvertThreeLetterNameToTwoLetterName(this string countryCode)
+        {
+            if (countryCode.Length != 3)
+            {
+                if (countryCode.Length != 2)
+                {
+                    throw new ArgumentException("name must be three letters.");
+                }
+            }
+
+            countryCode = countryCode.ToUpper();
+
+            CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+            foreach (CultureInfo culture in cultures)
+            {
+                RegionInfo region = new RegionInfo(culture.LCID);
+                if (region.ThreeLetterISORegionName.ToUpper() == countryCode)
+                {
+                    return region.TwoLetterISORegionName;
+                }
+            }
+
+            return countryCode;
+        }
+
+        public static string ConvertTwoLetterNameToThreeLetterName(this string countryCode)
+        {
+            if (countryCode.Length != 2)
+            {
+                if (countryCode.Length != 3)
+                {
+                    throw new ArgumentException("name must be three letters.");
+                }
+            }
+
+            countryCode = countryCode.ToUpper();
+
+            CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+            foreach (CultureInfo culture in cultures)
+            {
+                RegionInfo region = new RegionInfo(culture.LCID);
+                if (region.TwoLetterISORegionName.ToUpper() == countryCode)
+                {
+                    return region.ThreeLetterISORegionName;
+                }
+            }
+
+            return countryCode;
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Foundation.Features.Markets
         [Route("Set")]
         public ActionResult Set(ContentReference contentLink, [FromForm] string marketId)
         {
-            var newMarketId = new MarketId(marketId);
+            var newMarketId = new MarketId(marketId.ConvertTwoLetterNameToThreeLetterName());
             _currentMarket.SetCurrentMarket(newMarketId);
             var currentMarket = _marketService.GetMarket(newMarketId);
             var cart = _cartService.LoadCart(_cartService.DefaultCartName, true)?.Cart;
